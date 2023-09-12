@@ -29,7 +29,7 @@
     <div id ="dessin">
         <p>Position du clic : <span id="position"></span></p>
         <p>Type d'événement : <span id="eventType"></span></p>
-        <div style="position:absolute"; top:100; left:500; background-color:pink;><canvas id="canvas" width="400" height="400"></canvas></div>
+        <canvas id="canvas" width="400" height="400"></canvas>
     </div>
 
 <script>
@@ -42,6 +42,8 @@ var options = {
 
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
+context.fillStyle = "pink";
+context.fillRect(400,400,400,400);
 
 function success(pos) {
     var crd = pos.coords;
