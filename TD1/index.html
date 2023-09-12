@@ -83,11 +83,8 @@ function afficherOrientation(event) {
 }
 
 function afficherMouvement(event) {
-document.getElementById('rotationAcceleration').textContent = 
-`x: ${accelerationRotation.alpha.toFixed(2)}, y: ${accelerationRotation.beta.toFixed(2)}, z: ${accelerationRotation.gamma.toFixed(2)}`;
-
-document.getElementById('translationAcceleration').textContent = 
-`x: ${accelerationTranslation.x.toFixed(2)}, y: ${accelerationTranslation.y.toFixed(2)}, z: ${accelerationTranslation.z.toFixed(2)}`;
+    document.getElementById('rotationAcceleration').textContent = event.rotationRate.toFixed(2);
+    document.getElementById('translationAcceleration').textContent = event.acceleration.toFixed(2);
 }
 
 window.addEventListener('deviceorientation', afficherOrientation);
