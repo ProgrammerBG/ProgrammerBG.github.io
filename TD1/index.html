@@ -40,6 +40,9 @@ var options = {
   maximumAge: 0,
 };
 
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+
 function success(pos) {
     var crd = pos.coords;
     var output = document.getElementById("coords");
@@ -102,6 +105,49 @@ function afficherMouvement(event) {
 
 window.addEventListener('deviceorientation', afficherOrientation);
 window.addEventListener('devicemotion', afficherMouvement);
+
+function afficherPosition(positionX, positionY) {
+    document.getElementById('position').textContent = `X: ${positionX}, Y: ${positionY}`;
+}
+
+function afficherTypeEvenement(type) {
+    document.getElementById('eventType').textContent = type;
+}
+
+function dessinerPoint(x, y) {
+    context.beginPath();
+    context.arc(x, y, 5, 0, Math.PI * 2);
+    context.fill();
+}
+
+function TouchStart(event) {
+    const touch = event.touches[0];
+    const positionX = touch.clientX - canvas.getBoundingClientRect().left;
+    const positionY = touch.clientY - canvas.getBoundingClientRect().top;
+
+    afficherPosition(positionX, positionY);
+    afficherTypeEvenement('touchstart');
+    dessinerPoint(positionX, positionY);
+}
+
+function TouchMove(event) {
+    event.preventDefault(); // Empêche le défilement pendant le déplacement
+    const touch = event.touches[0];
+    const positionX = touch.clientX - canvas.getBoundingClientRect().left;
+    const positionY = touch.clientY - canvas.getBoundingClientRect().top;
+
+    afficherPosition(positionX, positionY);
+    afficherTypeEvenement('touchmove');
+    dessinerPoint(positionX, positionY);
+}
+
+function TouchEnd(event) {
+    afficherTypeEvenement('touchend');
+}
+
+canvas.addEventListener('touchstart', TouchStart);
+canvas.addEventListener('touchmove', TouchMove);
+canvas.addEventListener('touchend', TouchEnd);
 
 </script>
 </body>
