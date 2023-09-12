@@ -20,8 +20,8 @@
     </div>
     <div id="rotation">
         <h4>Rotation</h4>
-        <p>Accélération en rotation : <span id="rotationAcceleration">-</span></p>
-        <p>Accélération en translation : <span id="translationAcceleration">-</span></p>
+        <p>Accélération en rotation : <span id="rotation">-</span></p>
+        <p>Accélération en translation : <span id="translation">-</span></p>
     </div>
 
 <script>
@@ -86,10 +86,10 @@ function afficherMouvement(event) {
     let rota = event.rotationRate;
     let mouv = event.acceleration;
     
-    document.getElementById('rotationAcceleration').textContent = 
+    document.getElementById('rotation').textContent = 
     `x: ${accelerationRotation.alpha.toFixed(2)}, y: ${accelerationRotation.beta.toFixed(2)}, z: ${accelerationRotation.gamma.toFixed(2)}`;
 
-    document.getElementById('translationAcceleration').textContent = 
+    document.getElementById('translation').textContent = 
     `x: ${accelerationTranslation.x.toFixed(2)}, y: ${accelerationTranslation.y.toFixed(2)}, z: ${accelerationTranslation.z.toFixed(2)}`;
 }
 
