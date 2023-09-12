@@ -11,10 +11,10 @@ var options = {
 function success(pos) {
     var crd = pos.coords;
 
-    console.log("Votre position actuelle est :");
-    console.log(`Latitude : ${crd.latitude}`);
-    console.log(`Longitude : ${crd.longitude}`);
-    console.log(`La précision est de ${crd.accuracy} mètres.`);
+    document.write("Votre position actuelle est :");
+    document.write(`Latitude : ${crd.latitude}`);
+    document.write(`Longitude : ${crd.longitude}`);
+    document.write(`La précision est de ${crd.accuracy} mètres.`);
 }
 
 function error(err) {
