@@ -87,10 +87,10 @@ function afficherMouvement(event) {
     let mouv = event.acceleration;
     
     document.getElementById('rotation').textContent = 
-    `x: ${accelerationRotation.alpha.toFixed(2)}, y: ${accelerationRotation.beta.toFixed(2)}, z: ${accelerationRotation.gamma.toFixed(2)}`;
+    `x: ${rota.alpha.toFixed(2)}, y: ${rota.beta.toFixed(2)}, z: ${rota.gamma.toFixed(2)}`;
 
     document.getElementById('translation').textContent = 
-    `x: ${accelerationTranslation.x.toFixed(2)}, y: ${accelerationTranslation.y.toFixed(2)}, z: ${accelerationTranslation.z.toFixed(2)}`;
+    `x: ${mouv.x.toFixed(2)}, y: ${mouv.y.toFixed(2)}, z: ${mouv.z.toFixed(2)}`;
 }
 
 window.addEventListener('deviceorientation', afficherOrientation);
