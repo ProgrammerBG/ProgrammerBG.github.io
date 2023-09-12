@@ -20,8 +20,11 @@
     </div>
     <div id="rotation">
         <h4>Rotation</h4>
-        <p>Accélération en rotation : <span id="rotation">-</span></p>
-        <p>Accélération en translation : <span id="translation">-</span></p>
+        <p>
+            X: <span id="x">0</span><br />
+            Y: <span id="y">0</span><br />
+            Z: <span id="z">0</span><br />
+        </p>
     </div>
 
 <script>
@@ -83,14 +86,13 @@ function afficherOrientation(event) {
 }
 
 function afficherMouvement(event) {
-    let rota = event.rotationRate;
-    let mouv = event.acceleration;
-    
-    document.getElementById('rotation').textContent = 
-    `x: ${rota.alpha.toFixed(2)}, y: ${rota.beta.toFixed(2)}, z: ${rota.gamma.toFixed(2)}`;
+    const x = event.acceleration.x.toFixed(2);
+    const y = event.acceleration.y.toFixed(2);
+    const z = event.acceleration.z.toFixed(2);
 
-    document.getElementById('translation').textContent = 
-    `x: ${mouv.x.toFixed(2)}, y: ${mouv.y.toFixed(2)}, z: ${mouv.z.toFixed(2)}`;
+    document.getElementById('x').textContent = x;
+    document.getElementById('y').textContent = y;
+    document.getElementById('z').textContent = z;
 }
 
 window.addEventListener('deviceorientation', afficherOrientation);
