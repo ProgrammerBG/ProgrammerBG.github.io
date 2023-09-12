@@ -29,14 +29,32 @@ function success(pos) {
     let vitesse = crd.speed;
     let timestamp = new Date(pos.timestamp);
 
-    output.innerHTML = `
-        <p>Latitude : ${latitude}</p>
-        <p>Longitude : ${longitude}</p>
-        <p>Altitude : ${altitude}</p>
-        <p>Précision : ${precision} mètres</p>
-        <p>Vitesse : ${vitesse} m/s</p>
-        <p>Date : ${timestamp}</p>
-            `;
+    let latitudePara = document.createElement('p');
+    latitudePara.textContent = `Latitude : ${latitude}`;
+            
+    let longitudePara = document.createElement('p');
+    longitudePara.textContent = `Longitude : ${longitude}`;
+            
+    let altitudePara = document.createElement('p');
+    altitudePara.textContent = `Altitude : ${altitude}`;
+            
+    let precisionPara = document.createElement('p');
+    precisionPara.textContent = `Précision : ${precision} mètres`;
+            
+    let vitessePara = document.createElement('p');
+    vitessePara.textContent = `Vitesse : ${vitesse} m/s`;
+            
+    let datePara = document.createElement('p');
+    datePara.textContent = `Date : ${timestamp}`;
+    
+    output.innerHTML = '';
+
+    output.appendChild(latitudePara);
+    output.appendChild(longitudePara);
+    output.appendChild(altitudePara);
+    output.appendChild(precisionPara);
+    output.appendChild(vitessePara);
+    output.appendChild(datePara);
 }
 
 function error(err) {
