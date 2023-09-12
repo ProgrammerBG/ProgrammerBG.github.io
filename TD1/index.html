@@ -29,7 +29,6 @@
     <div id ="dessin">
         <p>Position du clic : <span id="position"></span></p>
         <p>Type d'événement : <span id="eventType"></span></p>
-        <canvas id="canvas" width="400" height="400"></canvas>
     </div>
 
 <script>
@@ -40,10 +39,6 @@ var options = {
   maximumAge: 0,
 };
 
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-context.fillStyle = "pink";
-context.fillRect(400,400,400,400);
 
 function success(pos) {
     var crd = pos.coords;
@@ -124,8 +119,8 @@ function dessinerPoint(x, y) {
 
 function TouchStart(event) {
     const touch = event.touches[0];
-    const positionX = touch.clientX - canvas.getBoundingClientRect().left;
-    const positionY = touch.clientY - canvas.getBoundingClientRect().top;
+    const positionX = touch.clientX - window.getBoundingClientRect().left;
+    const positionY = touch.clientY - window.getBoundingClientRect().top;
 
     afficherPosition(positionX, positionY);
     afficherTypeEvenement('touchstart');
@@ -135,8 +130,8 @@ function TouchStart(event) {
 function TouchMove(event) {
     event.preventDefault(); // Empêche le défilement pendant le déplacement
     const touch = event.touches[0];
-    const positionX = touch.clientX - canvas.getBoundingClientRect().left;
-    const positionY = touch.clientY - canvas.getBoundingClientRect().top;
+    const positionX = touch.clientX - window.getBoundingClientRect().left;
+    const positionY = touch.clientY - window.getBoundingClientRect().top;
 
     afficherPosition(positionX, positionY);
     afficherTypeEvenement('touchmove');
@@ -147,9 +142,9 @@ function TouchEnd(event) {
     afficherTypeEvenement('touchend');
 }
 
-canvas.addEventListener('touchstart', TouchStart);
-canvas.addEventListener('touchmove', TouchMove);
-canvas.addEventListener('touchend', TouchEnd);
+window.addEventListener('touchstart', TouchStart);
+window.addEventListener('touchmove', TouchMove);
+window.addEventListener('touchend', TouchEnd);
 
 </script>
 </body>
