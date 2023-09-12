@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>TD1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercice 2</title>
 </head>
 <body>
-<h3>Exercice 2</h3>
-<div id="coords">
+    <h3>Exercice 2</h3>
+    <div id="coords">
+        <!-- Les informations seront affichées ici -->
+    </div>
 
-</div>
 <script>
 
 var options = {
@@ -20,14 +21,22 @@ var options = {
 
 function success(pos) {
     var crd = pos.coords;
-    var c = document.getElementById("coords");
-    let p = document.createElement("p");
-    p.textContent = ("Votre position actuelle est :");
-    c.insertAdjacentHTML('beforeend', p);
-    //document.write("Votre position actuelle est :");
-    //document.write(`Latitude : ${crd.latitude}`);
-    //document.write(`Longitude : ${crd.longitude}`);
-    //document.write(`La précision est de ${crd.accuracy} mètres.`);
+    var output = document.getElementById("coords");
+    let latitude = crd.latitude;
+    let longitude = crd.longitude;
+    let altitude = crd.altitude;
+    let precision = crd.accuracy;
+    let vitesse = crd.speed;
+    let timestamp = new Date(pos.timestamp);
+
+    output.innerHTML = `
+        <p>Latitude : ${latitude}</p>
+        <p>Longitude : ${longitude}</p>
+        <p>Altitude : ${altitude}</p>
+        <p>Précision : ${precision} mètres</p>
+        <p>Vitesse : ${vitesse} m/s</p>
+        <p>Date : ${timestamp}</p>
+            `;
 }
 
 function error(err) {
