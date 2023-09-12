@@ -77,14 +77,14 @@ function error(err) {
 navigator.geolocation.getCurrentPosition(success, error, options);
 
 function afficherOrientation(event) {
-    document.getElementById('alpha').textContent = event.alpha.toFixed(2);
-    document.getElementById('beta').textContent = event.beta.toFixed(2);
-    document.getElementById('gamma').textContent = event.gamma.toFixed(2);
+    document.getElementById('alpha').textContent = event.alpha;
+    document.getElementById('beta').textContent = event.beta;
+    document.getElementById('gamma').textContent = event.gamma;
 }
 
 function afficherMouvement(event) {
-    document.getElementById('rotationAcceleration').textContent = event.rotationRate.toFixed(2);
-    document.getElementById('translationAcceleration').textContent = event.acceleration.toFixed(2);
+    document.getElementById('rotationAcceleration').textContent = event.rotationRate;
+    document.getElementById('translationAcceleration').textContent = event.acceleration;
 }
 
 window.addEventListener('deviceorientation', afficherOrientation);
