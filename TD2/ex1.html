@@ -6,7 +6,7 @@
     <title>TD1</title>
 </head>
 <body>
-
+    <h3>Exercice 1</h3>
     <div id="coords">
         <!-- Les informations seront affichées ici -->
     </div>
@@ -26,6 +26,7 @@ function success(pos) {
     var output = document.getElementById("coords");
     let latitude = crd.latitude;
     let longitude = crd.longitude;
+    let altitude = crd.altitude
     let latitudePara = document.createElement('p');
     latitudePara.textContent = `Latitude : ${latitude}`;
             
