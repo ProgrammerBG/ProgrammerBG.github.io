@@ -70,7 +70,22 @@ getLocation()
         };
 
         xhr.send();
+
+        xhr.open('GET', "voies.geojson");
+        xhr.setRequestHeader("Content-Type", "application/json")
+        xhr.responseType = 'json';
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var geojsonLayer = L.geoJSON(xhr.response).addTo(map);
+            } else {
+                console.error('Erreur lors de la recuperation des donnees GeoJSON.');
+            }
+        };
+
+        xhr.send();
     })
+    
     .catch(function (err) {
         console.warn(`ERREUR (${err.code}): ${err.message}`);
     });
