@@ -21,26 +21,57 @@
     <div id="map"></div>
 <script>
 
-var map = L.map('map').setView([51.505, -0.09], 13);
+/*var marker = L.marker([51.5, -0.09]).addTo(map);
 
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+var circle = L.circle([51.508, -0.11], {
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.5,
+    radius: 500
 }).addTo(map);
 
+var polygon = L.polygon([
+    [51.509, -0.08],
+    [51.503, -0.06],
+    [51.51, -0.047]
+]).addTo(map);*/
 
+/*marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+circle.bindPopup("I am a circle.");
+polygon.bindPopup("I am a polygon.");
+*/
+/*var popup = L.popup()
+    .setLatLng([51.513, -0.09])
+    .setContent("I am a standalone popup.")
+    .openOn(map);
+*/
+
+/*var popup = L.popup();
+
+function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+}
+
+map.on('click', onMapClick);
+*/
 var options = {
   enableHighAccuracy: true,
   timeout: 5000,
   maximumAge: 0,
 };
 
+var latitude;
+var longitude;
+
 
 function success(pos) {
     var crd = pos.coords;
     var output = document.getElementById("coords");
-    let latitude = crd.latitude;
-    let longitude = crd.longitude;
+    latitude = crd.latitude;
+    longitude = crd.longitude;
     let altitude = crd.altitude;
     let latitudePara = document.createElement('p');
     latitudePara.textContent = `Latitude : ${latitude}`;
@@ -62,7 +93,30 @@ function error(err) {
     console.warn(`ERREUR (${err.code}): ${err.message}`);
 }
 
-navigator.geolocation.getCurrentPosition(success, error, options);
+function getLocation() {
+    return new Promise(function (resolve, reject) {
+        navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    });
+}
+
+getLocation()
+    .then(function (pos) {
+        var crd = pos.coords;
+        latitude = crd.latitude;
+        longitude = crd.longitude;
+        console.log("Latitude : " + latitude);
+        console.log("Longitude : " + longitude);
+        var map = L.map('map').setView([latitude, longitude], 16);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+        var marker = L.marker([latitude, longitude]).addTo(map);
+        var markerNice = L.marker([43.7031300, 7.2660800]).addTo(map);
+    })
+    .catch(function (err) {
+        console.warn(`ERREUR (${err.code}): ${err.message}`);
+    });
 </script>
 
 </body>

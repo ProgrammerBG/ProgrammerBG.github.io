@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="ex1.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+    <title>Exercice 2</title>
+</head>
+<body>
+    <h3>Exercice 2</h3>
+    <div id="map"></div>
+<script>
+
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
+var latitude;
+var longitude;
+var accuracy;
+
+function getLocation() {
+    return new Promise(function (resolve, reject) {
+        navigator.geolocation.getCurrentPosition(resolve, reject, options);
+    });
+}
+
+getLocation()
+    .then(function (pos) {
+        var crd = pos.coords;
+        latitude = crd.latitude;
+        longitude = crd.longitude;
+        accuracy = crd.accuracy;
+        console.log("Latitude : " + latitude);
+        console.log("Longitude : " + longitude);
+        var map = L.map('map').setView([latitude, longitude], 10);
+        L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.{ext}', {
+        attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        minZoom: 1,
+        maxZoom: 20,
+        ext: 'png'
+        }).addTo(map);
+        //var marker = L.marker([latitude, longitude]).addTo(map);
+        //var markerNice = L.marker([43.7031300, 7.2660800]).addTo(map);
+        var polygon = L.polygon([
+        [25.7617, -80.1918],
+        [32.3078, -64.7505],
+        [18.4663, -66.1057]
+        ]).addTo(map);
+        polygon.setStyle({
+        color: 'red',
+        fillColor: 'red',
+        fillOpacity: 0.5
+        });
+        L.circle([latitude, longitude], {
+        radius: accuracy,
+        color: 'red',
+        fillColor: 'red',
+        fillOpacity: 0.2
+        }).addTo(map);
+    })
+    .catch(function (err) {
+        console.warn(`ERREUR (${err.code}): ${err.message}`);
+    });
+</script>
+
+</body>
+</html>
