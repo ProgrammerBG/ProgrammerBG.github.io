@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TD1</title>
+</head>
+<body>
+
+    <div id="coords">
+        <!-- Les informations seront affichées ici -->
+    </div>
+
+<script>
+
+
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
+
+function success(pos) {
+    var crd = pos.coords;
+    var output = document.getElementById("coords");
+    let latitude = crd.latitude;
+    let longitude = crd.longitude;
+    let latitudePara = document.createElement('p');
+    latitudePara.textContent = `Latitude : ${latitude}`;
+            
+    let longitudePara = document.createElement('p');
+    longitudePara.textContent = `Longitude : ${longitude}`;
+            
+    let altitudePara = document.createElement('p');
+    altitudePara.textContent = `Altitude : ${altitude}`;
+
+    output.innerHTML = '';
+
+    output.appendChild(latitudePara);
+    output.appendChild(longitudePara);
+    output.appendChild(altitudePara);
+}
+
+function error(err) {
+    console.warn(`ERREUR (${err.code}): ${err.message}`);
+}
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+</script>
+
+</body>
+</html>
