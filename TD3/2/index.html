@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script type="importmap">
+        {
+            "imports": {
+            "three": "https://unpkg.com/three@v0.157.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@v0.157.0/examples/jsm/"
+            }
+        }
+    </script>
+    <title>Exercice 2</title>
+</head>
+<body>
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100);
+
+    const renderer = new THREE.WebGLRenderer();
+    const controls = new OrbitControls( camera, renderer.domElement );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load('plage.jpg');
+    const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    const material = new THREE.MeshBasicMaterial( { map: texture } );
+    const cube = new THREE.Mesh( geometry, material );
+    let dog;
+    cube.position.set(1, 1, 1);
+    scene.add( cube );
+
+    scene.fog = new THREE.Fog(0x000000, 1, 10);
+    
+    const loader = new GLTFLoader();
+
+    loader.load( './scene.gltf', function ( gltf ) {
+
+	scene.add( gltf.scene );
+    dog = gltf.scene;
+
+    }, undefined, function ( error ) {
+
+	console.error( error );
+
+    } );
+
+
+    camera.position.z = 5;
+
+    function animate() {
+	requestAnimationFrame( animate );
+    controls.update();
+
+    cube.rotation.x += 0.01;
+	cube.rotation.y += 0.01;
+
+    dog.rotation.y += 0.01;
+
+
+	renderer.render( scene, camera );
+    }
+    animate();
+
+</script>
+</body>
+</html>
