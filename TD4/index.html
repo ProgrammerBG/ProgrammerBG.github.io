@@ -198,6 +198,10 @@
             maxZoom: 19,
         }).addTo(map);
 
+        function repositionner(map, latitude, longitude) {
+            map.setView([latitude, longitude], map.getZoom);
+        }
+
         // Créez un marqueur (exemple : Paris)
         const marker = L.marker([48.8566, 2.3522]).addTo(map);
     }
