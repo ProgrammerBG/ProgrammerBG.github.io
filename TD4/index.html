@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <script type="importmap">
+        {
+            "imports": {
+            "three": "https://unpkg.com/three@v0.157.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@v0.157.0/examples/jsm/"
+            }
+        }
+    </script>
+    <title>Exercice 1</title>
+</head>
+<body>
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100);
+
+    const renderer = new THREE.WebGLRenderer();
+    const controls = new OrbitControls( camera, renderer.domElement );
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( renderer.domElement );
+    camera.position.z = 5;
+
+    const sphereGeometry = new THREE.SphereGeometry(1, 32, 32); 
+    const textureLoader = new THREE.TextureLoader();
+    const texture = textureLoader.load('terre.jpg');
+    const sphereMaterial = new THREE.MeshBasicMaterial({ map: texture }); 
+    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+
+    scene.add(sphere);
+    sphere.position.set(0, 0, 0);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+    scene.add(ambientLight);
+
+    function latLonToCartesian(latitude, longitude, radius) {
+        // Convertir les degrés en radians
+        const latRad = (latitude * Math.PI) / 180;
+        const lonRad = (longitude * Math.PI) / 180;
+
+        // Convertir les coordonnées sphériques en cartésiennes
+        const x = radius * Math.cos(latRad) * Math.cos(lonRad);
+        const z = radius * Math.cos(latRad) * Math.sin(lonRad);
+        const y = radius * Math.sin(latRad);
+
+        return { x, y, z };
+    }
+
+
+
+    var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+        };
+
+    var latitude;
+    var longitude;
+    var radius = 1;
+
+    function success(pos) {
+        var crd = pos.coords;
+        latitude = crd.latitude;
+        longitude = crd.longitude;
+        let posCartesienne = latLonToCartesian(latitude, longitude, radius);
+        let x= posCartesienne.x;
+        let y= posCartesienne.y;
+        let z= posCartesienne.z;
+        let sphereGeometry = new THREE.SphereGeometry(0.01, 32, 32); 
+        let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); 
+        let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+
+        scene.add(sphere);
+        sphere.position.set(x, y, z);
+    }
+
+    function error(err) {
+        console.warn(`ERREUR (${err.code}): ${err.message}`);
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
+    function animate() {
+	requestAnimationFrame( animate );
+    controls.update();
+
+	renderer.render( scene, camera );
+    }
+    animate();
+
+</script>
+</body>
+</html>
