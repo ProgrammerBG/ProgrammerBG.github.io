@@ -2,6 +2,12 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
     <script type="importmap">
         {
             "imports": {
@@ -13,6 +19,8 @@
     <title>Exercice 1</title>
 </head>
 <body>
+    <div id="terre"></div>
+    <div id="map" style="width: 100%; height: 400px;"></div>
 <script type="module">
     import * as THREE from 'three';
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
@@ -23,11 +31,12 @@
 
     const renderer = new THREE.WebGLRenderer();
     const controls = new OrbitControls( camera, renderer.domElement );
-    renderer.setSize( window.innerWidth, window.innerHeight );
-    document.body.appendChild( renderer.domElement );
+    renderer.setSize( (window.innerWidth)/2, (window.innerHeight)/2 );
+    const terreDiv = document.getElementById('terre');
+    terreDiv.appendChild( renderer.domElement );
     camera.position.z = 5;
 
-    const sphereGeometry = new THREE.SphereGeometry(1, 32, 32); 
+    const sphereGeometry = new THREE.SphereGeometry(1, 160, 160); 
     const textureLoader = new THREE.TextureLoader();
     const texture = textureLoader.load('terre.jpg');
     const sphereMaterial = new THREE.MeshBasicMaterial({ map: texture }); 
@@ -79,6 +88,8 @@
         scene.add(sphere);
         sphere.position.set(x, y, z);
 
+        repositionner(latitude,longitude);
+
         fetch('https://restcountries.com/v3.1/all')
         .then(response => response.json())
         .then(data => {
@@ -120,6 +131,80 @@
 	renderer.render( scene, camera );
     }
     animate();
+
+
+    L.CustomClickHandler = L.Handler.extend({
+        addHooks() {
+            L.DomEvent.on('click', this._doSomething, this);
+        },
+
+        removeHooks() {
+            L.DomEvent.off('click', this._doSomething, this);
+        },
+
+        _doSomething: function(event) {
+            const latlng = event.latlng;
+            const lat = latlng.lat;
+            const lng = latlng.lng;
+            console.log(`Latitude: ${lat}, Longitude: ${lng}`);
+
+            repositionner(lat, lng);
+        }
+    });
+
+    L.Map.addInitHook('addHandler', 'customClickHandler', L.CustomClickHandler);
+
+    function repositionner(latitude, longitude) {
+        let posCartesienne = latLonToCartesian(latitude, longitude, 1.5);
+        let x = posCartesienne.x;
+        let y = posCartesienne.y;
+        let z = posCartesienne.z;
+    
+        camera.position.set(x, y, z);
+
+        camera.lookAt(0, 0, 0);
+    }
+
+    renderer.domElement.addEventListener('click', onMouseClick, false);
+
+    function onMouseClick(event) {
+        const mouseX = (event.offsetX / (renderer.domElement.clientWidth / 2)) * 2 - 1;
+        const mouseY = -(event.offsetY / (renderer.domElement.clientHeight / 2)) * 2 + 1;
+
+        const mouseVector = new THREE.Vector2(mouseX, mouseY);
+
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouseVector, camera);
+
+        const intersects = raycaster.intersectObject(sphere);
+        console.log("click");
+        console.log(mouseX);
+        console.log(mouseY);
+        if (intersects.length > 0) {
+            const intersectionPoint = intersects[0].point;
+
+            const radius = 1;
+            const latitude = (Math.asin(intersectionPoint.y / radius) * 180) / Math.PI;
+            const longitude = (Math.atan2(intersectionPoint.x, intersectionPoint.z) * 180) / Math.PI;
+
+            console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        }
+    }
+
+
+    function initMap() {
+        var map = L.map('map').setView([48.8566, 2.3522], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Créez un marqueur (exemple : Paris)
+        const marker = L.marker([48.8566, 2.3522]).addTo(map);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initMap(); // Initialisez la carte Leaflet
+    });
 
 </script>
 </body>
