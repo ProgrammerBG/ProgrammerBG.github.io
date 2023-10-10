@@ -42,7 +42,7 @@
     function latLonToCartesian(latitude, longitude, radius) {
         // Convertir les degrés en radians
         const latRad = (latitude * Math.PI) / 180;
-        const lonRad = (longitude * Math.PI) / 180;
+        const lonRad = (-1 * longitude * Math.PI) / 180;
 
         // Convertir les coordonnées sphériques en cartésiennes
         const x = radius * Math.cos(latRad) * Math.cos(lonRad);
