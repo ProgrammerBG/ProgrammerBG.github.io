@@ -69,15 +69,42 @@
         latitude = crd.latitude;
         longitude = crd.longitude;
         let posCartesienne = latLonToCartesian(latitude, longitude, radius);
-        let x= posCartesienne.x;
-        let y= posCartesienne.y;
-        let z= posCartesienne.z;
+        let x = posCartesienne.x;
+        let y = posCartesienne.y;
+        let z = posCartesienne.z;
         let sphereGeometry = new THREE.SphereGeometry(0.01, 32, 32); 
         let sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); 
         let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial); 
 
         scene.add(sphere);
         sphere.position.set(x, y, z);
+
+        fetch('https://restcountries.com/v3.1/all')
+        .then(response => response.json())
+        .then(data => {
+            for(let country of data) {
+                let lat = country.latlng[0];
+                let lng = country.latlng[1];
+                let flag = country.flags.svg;
+                console.log(flag);
+                let posCartesienne = latLonToCartesian(lat, lng, radius);
+                let x = posCartesienne.x;
+                let y = posCartesienne.y;
+                let z = posCartesienne.z;
+                let textureLoader = new THREE.TextureLoader();
+                let texture = textureLoader.load(flag);
+                let sphereGeometry = new THREE.SphereGeometry(0.01, 32, 32); 
+                let sphereMaterial = new THREE.MeshBasicMaterial({ map: texture }); 
+                let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial); 
+
+                scene.add(sphere);
+                sphere.position.set(x, y, z);
+            }
+            console.log(data[0].latlng);
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération des données :', error);
+        });
     }
 
     function error(err) {
